@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stopwatch</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #e0f7fa; /* Set a single background color for the entire body */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: #333;
+    }
+
+    .container {
+      background: linear-gradient(135deg, #ff7e5f, #feb47b); /* Attractive gradient background for the container */
+      padding: 50px 30px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 300px;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: white;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .time {
+      font-size: 50px;
+      margin-bottom: 30px;
+      font-weight: bold;
+      color: white;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    button {
+      font-size: 18px;
+      margin: 10px;
+      padding: 12px 25px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: white;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    button:active {
+      background-color: #3e8e41;
+    }
+
+    /* Button Reset Styling */
+    button.reset {
+      background-color: #f44336;
+    }
+
+    button.reset:hover {
+      background-color: #e53935;
+    }
+
+    button.reset:active {
+      background-color: #d32f2f;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Stopwatch</h1>
+    <div class="time">00:00:00</div>
+    <button onclick="start()">Start</button>
+    <button onclick="stop()">Stop</button>
+    <button class="reset" onclick="reset()">Reset</button>
+  </div>
+
+  <script>
+    let startTime;
+    let elapsedTime = 0;
+    let timerInterval;
+    let isRunning = false;
+
+    function start() {
+      if (!isRunning) {
+        startTime = Date.now() - elapsedTime; // Start or resume from last elapsed time
+        timerInterval = setInterval(updateTime, 1000); // Update time every second
+        isRunning = true;
+      }
+    }
+
+    function stop() {
+      clearInterval(timerInterval); // Stop the timer
+      isRunning = false;
+      elapsedTime = Date.now() - startTime; // Save the elapsed time when stopped
+    }
+
+    function reset() {
+      clearInterval(timerInterval); // Stop the timer
+      isRunning = false;
+      elapsedTime = 0; // Reset elapsed time
+      document.querySelector('.time').textContent = '00:00:00'; // Reset displayed time
+    }
+
+    function updateTime() {
+      const currentTime = Date.now() - startTime; // Calculate elapsed time
+      const seconds = Math.floor(currentTime / 1000) % 60;
+      const minutes = Math.floor(currentTime / 1000 / 60) % 60;
+      const hours = Math.floor(currentTime / 1000 / 3600);
+
+      const formattedTime = pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);
+      document.querySelector('.time').textContent = formattedTime; // Update the display
+    }
+
+    function pad(value, width) {
+      value = value.toString();
+      while (value.length < width) {
+        value = '0' + value;
+      }
+      return value;
+    }
+  </script>
+</body>
+</html>
